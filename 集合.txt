@@ -1,0 +1,24 @@
+1.Array数组长度不可变
+2.ArrayList<E>长度是可以变的。
+	<E>统一装入ArrayList内的类型。
+	ArryList<String> list = new ArryList<String>();
+	
+	add(E e) 向集合中添加元素。
+	get(int index) 从集合中获取元素。
+	remove(int index）从集合中删除元素
+	size() 获取集合的长度。
+
+泛型只能是引用类型，不能是基本类型。
+如果想要向集合中存储基本类型数据，必须使用基本类型的包装类。
+基本类型  	包装类
+byte		Byte
+short		Short
+int			Integer
+long		Long
+float		Float
+double		Double
+char		Character
+boolean		Blooean
+
+可以用int 接收 Interger。
+此处用了自动装箱，拆箱。jdk1.5后支持。

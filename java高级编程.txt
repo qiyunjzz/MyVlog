@@ -1,0 +1,247 @@
+java 数据结构
+枚举 Enumeration
+接口定义了一种从数据结构中取回连续元素的方式。
+ 现在很少用了，已经被迭代器取代了。
+
+位集合 BitSet
+可以单独设置和清除的位或标志。
+一般在处理布尔值的时候使用。
+
+序号	方法描述
+1	void and(BitSet bitSet)
+对此目标位 set 和参数位 set 执行逻辑与操作。
+2	void andNot(BitSet bitSet)
+清除此 BitSet 中所有的位，其相应的位在指定的 BitSet 中已设置。
+3	int cardinality( )
+返回此 BitSet 中设置为 true 的位数。
+4	void clear( )
+将此 BitSet 中的所有位设置为 false。
+5	void clear(int index)
+将索引指定处的位设置为 false。
+6	void clear(int startIndex, int endIndex)
+将指定的 fromIndex（包括）到指定的 toIndex（不包括）范围内的位设置为 false。
+7	Object clone( )
+复制此 BitSet，生成一个与之相等的新 BitSet。
+8	boolean equals(Object bitSet)
+将此对象与指定的对象进行比较。
+9	void flip(int index)
+将指定索引处的位设置为其当前值的补码。
+10	void flip(int startIndex, int endIndex)
+将指定的 fromIndex（包括）到指定的 toIndex（不包括）范围内的每个位设置为其当前值的补码。
+11	boolean get(int index)
+返回指定索引处的位值。
+12	BitSet get(int startIndex, int endIndex)
+返回一个新的 BitSet，它由此 BitSet 中从 fromIndex（包括）到 toIndex（不包括）范围内的位组成。
+13	int hashCode( )
+返回此位 set 的哈希码值。
+14	boolean intersects(BitSet bitSet)
+如果指定的 BitSet 中有设置为 true 的位，并且在此 BitSet 中也将其设置为 true，则返回 ture。
+15	boolean isEmpty( )
+如果此 BitSet 中没有包含任何设置为 true 的位，则返回 ture。
+16	int length( )
+返回此 BitSet 的"逻辑大小"：BitSet 中最高设置位的索引加 1。
+17	int nextClearBit(int startIndex)
+返回第一个设置为 false 的位的索引，这发生在指定的起始索引或之后的索引上。
+18	int nextSetBit(int startIndex)
+返回第一个设置为 true 的位的索引，这发生在指定的起始索引或之后的索引上。
+19	void or(BitSet bitSet)
+对此位 set 和位 set 参数执行逻辑或操作。
+20	void set(int index)
+将指定索引处的位设置为 true。
+21	void set(int index, boolean v)
+ 将指定索引处的位设置为指定的值。
+22	void set(int startIndex, int endIndex)
+将指定的 fromIndex（包括）到指定的 toIndex（不包括）范围内的位设置为 true。
+23	void set(int startIndex, int endIndex, boolean v)
+将指定的 fromIndex（包括）到指定的 toIndex（不包括）范围内的位设置为指定的值。
+24	int size( )
+返回此 BitSet 表示位值时实际使用空间的位数。
+25	String toString( )
+返回此位 set 的字符串表示形式。
+26	void xor(BitSet bitSet)
+对此位 set 和位 set 参数执行逻辑异或操作。
+
+向量
+与数组相似，但是大小可以根据需要动态的变化。
+
+序号	方法描述
+1	void add(int index, Object element) 
+ 在此向量的指定位置插入指定的元素。
+2	boolean add(Object o) 
+ 将指定元素添加到此向量的末尾。
+3	boolean addAll(Collection c) 
+将指定 Collection 中的所有元素添加到此向量的末尾，按照指定 collection 的迭代器所返回的顺序添加这些元素。
+4	boolean addAll(int index, Collection c) 
+在指定位置将指定 Collection 中的所有元素插入到此向量中。
+5	void addElement(Object obj) 
+ 将指定的组件添加到此向量的末尾，将其大小增加 1。
+6	int capacity() 
+返回此向量的当前容量。
+7	void clear() 
+从此向量中移除所有元素。
+8	Object clone() 
+返回向量的一个副本。
+9	boolean contains(Object elem) 
+如果此向量包含指定的元素，则返回 true。
+10	boolean containsAll(Collection c) 
+如果此向量包含指定 Collection 中的所有元素，则返回 true。
+11	void copyInto(Object[] anArray) 
+ 将此向量的组件复制到指定的数组中。
+12	Object elementAt(int index) 
+返回指定索引处的组件。
+13	Enumeration elements() 
+返回此向量的组件的枚举。
+14	void ensureCapacity(int minCapacity) 
+增加此向量的容量（如有必要），以确保其至少能够保存最小容量参数指定的组件数。
+15	boolean equals(Object o) 
+比较指定对象与此向量的相等性。
+16	Object firstElement() 
+返回此向量的第一个组件（位于索引 0) 处的项）。
+17	Object get(int index) 
+返回向量中指定位置的元素。
+18	int hashCode() 
+返回此向量的哈希码值。
+19	int indexOf(Object elem) 
+ 返回此向量中第一次出现的指定元素的索引，如果此向量不包含该元素，则返回 -1。
+20	int indexOf(Object elem, int index) 
+ 返回此向量中第一次出现的指定元素的索引，从 index 处正向搜索，如果未找到该元素，则返回 -1。
+21	void insertElementAt(Object obj, int index) 
+将指定对象作为此向量中的组件插入到指定的 index 处。
+22	boolean isEmpty() 
+测试此向量是否不包含组件。
+23	Object lastElement() 
+返回此向量的最后一个组件。
+24	int lastIndexOf(Object elem) 
+ 返回此向量中最后一次出现的指定元素的索引；如果此向量不包含该元素，则返回 -1。
+25	int lastIndexOf(Object elem, int index) 
+返回此向量中最后一次出现的指定元素的索引，从 index 处逆向搜索，如果未找到该元素，则返回 -1。
+26	Object remove(int index) 
+ 移除此向量中指定位置的元素。
+27	boolean remove(Object o) 
+移除此向量中指定元素的第一个匹配项，如果向量不包含该元素，则元素保持不变。
+28	boolean removeAll(Collection c) 
+从此向量中移除包含在指定 Collection 中的所有元素。
+29	void removeAllElements() 
+从此向量中移除全部组件，并将其大小设置为零。
+30	boolean removeElement(Object obj) 
+从此向量中移除变量的第一个（索引最小的）匹配项。
+31	void removeElementAt(int index) 
+删除指定索引处的组件。
+32	protected void removeRange(int fromIndex, int toIndex)
+从此 List 中移除其索引位于 fromIndex（包括）与 toIndex（不包括）之间的所有元素。
+33	boolean retainAll(Collection c) 
+在此向量中仅保留包含在指定 Collection 中的元素。
+34	Object set(int index, Object element)
+ 用指定的元素替换此向量中指定位置处的元素。
+35	void setElementAt(Object obj, int index) 
+将此向量指定 index 处的组件设置为指定的对象。
+36	void setSize(int newSize) 
+ 设置此向量的大小。
+37	int size() 
+ 返回此向量中的组件数。
+38	List subList(int fromIndex, int toIndex) 
+返回此 List 的部分视图，元素范围为从 fromIndex（包括）到 toIndex（不包括）。
+39	Object[] toArray()
+ 返回一个数组，包含此向量中以恰当顺序存放的所有元素。
+40	Object[] toArray(Object[] a) 
+返回一个数组，包含此向量中以恰当顺序存放的所有元素；返回数组的运行时类型为指定数组的类型。
+41	String toString() 
+返回此向量的字符串表示形式，其中包含每个元素的 String 表示形式。
+42	void trimToSize() 
+  对此向量的容量进行微调，使其等于向量的当前大小。
+  
+  
+栈 Stact
+实现先就后出的数据结构
+序号	方法描述
+1	boolean empty() 
+测试堆栈是否为空。
+2	Object peek( )
+查看堆栈顶部的对象，但不从堆栈中移除它。
+3	Object pop( )
+移除堆栈顶部的对象，并作为此函数的值返回该对象。
+4	Object push(Object element)
+把项压入堆栈顶部。
+5	int search(Object element)
+返回对象在堆栈中的位置，以 1 为基数。
+
+字典 Dictionary
+是一个抽象类，定义了键映射到值的数据结构
+想要用特定的键访问一个值时可以用字典。
+
+序号	方法描述
+1	Enumeration elements( )
+返回此 dictionary 中值的枚举。
+2	Object get(Object key)
+返回此 dictionary 中该键所映射到的值。
+3	boolean isEmpty( )
+测试此 dictionary 是否不存在从键到值的映射。
+4	Enumeration keys( )
+返回此 dictionary 中的键的枚举。
+5	Object put(Object key, Object value)
+将指定 key 映射到此 dictionary 中指定 value。
+6	Object remove(Object key)
+从此 dictionary 中移除 key （及其相应的 value）。
+7	int size( )
+返回此 dictionary 中条目（不同键）的数量。
+
+哈希表Hashtable
+在用户定义键结构的基础上来组织数据的手段。
+
+序号	方法描述
+1	void clear( )
+ 将此哈希表清空，使其不包含任何键。
+2	Object clone( )
+创建此哈希表的浅表副本。
+3	boolean contains(Object value)
+ 测试此映射表中是否存在与指定值关联的键。
+4	boolean containsKey(Object key)
+测试指定对象是否为此哈希表中的键。
+5	boolean containsValue(Object value)
+如果此 Hashtable 将一个或多个键映射到此值，则返回 true。
+6	Enumeration elements( )
+返回此哈希表中的值的枚举。
+7	Object get(Object key)
+ 返回指定键所映射到的值，如果此映射不包含此键的映射，则返回 null. 更确切地讲，如果此映射包含满足 (key.equals(k)) 的从键 k 到值 v 的映射，则此方法返回 v；否则，返回 null。
+8	boolean isEmpty( )
+测试此哈希表是否没有键映射到值。
+9	Enumeration keys( )
+ 返回此哈希表中的键的枚举。
+10	Object put(Object key, Object value)
+将指定 key 映射到此哈希表中的指定 value。
+11	void rehash( )
+增加此哈希表的容量并在内部对其进行重组，以便更有效地容纳和访问其元素。
+12	Object remove(Object key)
+从哈希表中移除该键及其相应的值。
+13	int size( )
+ 返回此哈希表中的键的数量。
+14	String toString( )
+返回此 Hashtable 对象的字符串表示形式，其形式为 ASCII 字符 ", " （逗号加空格）分隔开的、括在括号中的一组条目。
+
+属性 Properties
+属性列表中每个键及其对应值都是一个字符串。
+
+
+
+java集合框架
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

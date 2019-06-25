@@ -1,0 +1,549 @@
+
+2.数据类型
+	整数
+	浮点数
+	字符串 ‘’ “”  “ ‘ ”  \'
+	布尔值 True false 可以用and or not进行计算
+	空值 None 不能理解为0，0是有意义的，None还是一个特殊的空值
+
+3.	变量
+	常量
+	
+4.	字符和编码
+字符编码
+ASCII 一个字节
+Unicode 两个字节 可以兼容多种字符，兼容ASCII时，在ASCII前加0
+UTF-8 可变长 用于存储 与Unicode之间转换
+
+ord（） 获取字符的整数表示
+chr（）把编码转换成对应的字符
+也可以用\u4e2 \u6587 -> 中文
+
+‘ABC’ str 字符串
+b'ABC' bytes 每个字符占用一个字节
+以Unicode表示的str通过encode()方法可以编码为指定的bytes
+
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*- 按照utf-8来读取源码
+
+字符串格式化
+%d		整数
+%f 		浮点数
+%s 		字符串
+%x		十六进制整数
+
+5.使用list和tuple lie'b
+list是一种有序的集合，可以随时添加和删除其中的元素。
+len（）可以获取list元素的个数。
+list 索引从0开始
+
+tuple一旦初始化，就不能修改。指向不变，指向的数据可变。
+
+
+6.条件判断
+if xx
+elif
+else
+
+7.循环
+for x in[]:
+
+range（）可以生成一个整数序列
+list（range（0，5））
+
+for x in range（0，5）:
+
+while n > 0
+	n--
+	
+循环中break 跳出循环，用break提前结束循环。
+continue 跳过当前这次循环，直接开始下一次循环。
+
+8.使用dict和set
+dict 字典
+d = {'michael':95,'bob':75,'tracy':85}
+通过in判断key是否存在 返回false or true
+通过get（）获取，如果key值不存在，返回None，也可以自己指定。
+d.get('jams',-1) ,返回-1
+
+pop（key），
+删除一个key值，对应的value也会从dict中删除。
+
+dict 查询快，占内存多。
+list 查询慢，占内存少。
+
+dict的key是不可变对象。
+通过key计算value的算法为哈希算法。
+
+set只存放不重复的key值。且无序
+add（key）添加key
+remove（key）删除key
+
+set可以看成无序和不重合元素的集合，两个set可以做数学意义上的交集，并集。
+max() 返回最大的数
+abs() 求绝对值
+int() 转换成整数
+
+
+递归函数
+
+list 列表切片
+
+如果给定一个list或tuple，我们可以通过for循环来遍历这个list或tuple，这种遍历我们称为迭代（Iteration）
+那么，如何判断一个对象是可迭代对象呢？方法是通过collections模块的Iterable类型判断
+from collections import Iterable
+
+如果要对list实现类似Java那样的下标循环怎么办？Python内置的enumerate函数可以把一个list变成索引-元素对，这样就可以在for循环中同时迭代索引和元素本身：
+
+列表生成式
+>>> list(range(1, 11))
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+>>> L = []
+>>> for x in range(1, 11):
+...    L.append(x * x)
+...
+>>> L
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+>>> [x * x for x in range(1, 11)]
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+>>> [x * x for x in range(1, 11) if x % 2 == 0]
+[4, 16, 36, 64, 100]
+
+>>> [m + n for m in 'ABC' for n in 'XYZ']
+['AX', 'AY', 'AZ', 'BX', 'BY', 'BZ', 'CX', 'CY', 'CZ']
+
+
+>>> import os # 导入os模块，模块的概念后面讲到
+>>> [d for d in os.listdir('.')] # os.listdir可以列出文件和目录
+['.emacs.d', '.ssh', '.Trash', 'Adlm', 'Applications', 'Desktop', 'Documents', 'Downloads', 'Library', 'Movies', 'Music', 'Pictures', 'Public', 'VirtualBox VMs', 'Workspace', 'XCode']
+
+>>> d = {'x': 'A', 'y': 'B', 'z': 'C' }
+>>> for k, v in d.items():
+...     print(k, '=', v)
+...
+y = B
+x = A
+z = C
+
+
+>>> d = {'x': 'A', 'y': 'B', 'z': 'C' }
+>>> [k + '=' + v for k, v in d.items()]
+['y=B', 'x=A', 'z=C']
+
+>>> L = ['Hello', 'World', 'IBM', 'Apple']
+>>> [s.lower() for s in L]
+['hello', 'world', 'ibm', 'apple']
+
+isinstance（x,str）判断是不是字符串
+
+生成器 List generator
+>>> L = [x * x for x in range(10)]
+>>> L
+[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+>>> g = (x * x for x in range(10))
+>>> g
+<generator object <genexpr> at 0x1022ef630>
+
+这就是定义generator的另一种方法。如果一个函数定义中包含yield关键字，那么这个函数就不再是一个普通函数，而是一个generator：
+但是用for循环调用generator时，发现拿不到generator的return语句的返回值。如果想要拿到返回值，必须捕获StopIteration错误，返回值包含在StopIteration的value中：
+
+
+7 .迭代器
+我们已经知道，可以直接作用于for循环的数据类型有以下几种：
+一类是集合数据类型，如list、tuple、dict、set、str等；
+一类是generator，包括生成器和带yield的generator function。
+这些可以直接作用于for循环的对象统称为可迭代对象：Iterable。
+可以使用isinstance()判断一个对象是否是Iterable对象：
+而生成器不但可以作用于for循环，还可以被next()函数不断调用并返回下一个值，直到最后抛出StopIteration错误表示无法继续返回下一个值了。
+
+可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator。
+
+可以使用isinstance()判断一个对象是否是Iterator对象：
+
+生成器都是Iterator对象，但list、dict、str虽然是Iterable，却不是Iterator。
+
+把list、dict、str等Iterable变成Iterator可以使用iter()函数：
+这是因为Python的Iterator对象表示的是一个数据流，Iterator对象可以被next()函数调用并不断返回下一个数据，直到没有数据时抛出StopIteration错误。可以把这个数据流看做是一个有序序列，但我们却不能提前知道序列的长度，只能不断通过next()函数实现按需计算下一个数据，所以Iterator的计算是惰性的，只有在需要返回下一个数据时它才会计算。
+
+Iterator甚至可以表示一个无限大的数据流，例如全体自然数。而使用list是永远不可能存储全体自然数的。
+
+
+8.函数式编程
+函数就是面向过程的程序设计的基本单元。
+把abs指向10后，就无法通过abs(-10)调用该函数了！因为abs这个变量已经不指向求绝对值函数而是指向一个整数10！
+当然实际代码绝对不能这么写，这里是为了说明函数名也是变量。要恢复abs函数，请重启Python交互环境。
+注：由于abs函数实际上是定义在import builtins模块中的，所以要让修改abs变量的指向在其它模块也生效，要用import builtins; builtins.abs = 10。
+
+
+9.map/reduce
+map()函数接收两个参数，一个是函数，一个是Iterable，map将传入的函数依次作用到序列的每个元素，并把结果作为新的Iterator返回。
+reduce把一个函数作用在一个序列[x1, x2, x3, ...]上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算
+reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)from functools import reduce
+
+DIGITS = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
+
+def str2int(s):
+    def fn(x, y):
+        return x * 10 + y
+    def char2num(s):
+        return DIGITS[s]
+    return reduce(fn, map(char2num, s))
+	
+	
+filter()也接收一个函数和一个序列。filter()把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素。
+注意到filter()函数返回的是一个Iterator，也就是一个惰性序列，所以要强迫filter()完成计算结果，需要用list()函数获得所有结果并返回list。
+
+排序
+sorted
+sorted()函数也是一个高阶函数，它还可以接收一个key函数来实现自定义的排序，例如按绝对值大小排序：
+sorted()也是一个高阶函数。用sorted()排序的关键在于实现一个映射函数。
+	
+	
+匿名函数
+键字lambda表示匿名函数，冒号前面的x表示函数参数
+用匿名函数有个好处，因为函数没有名字，不必担心函数名冲突。此外，匿名函数也是一个函数对象，也可以把匿名函数赋值给一个变量，再利用变量来调用该函数：
+
+
+装饰器
+假设我们要增强now()函数的功能，比如，在函数调用前后自动打印日志，但又不希望修改now()函数的定义，这种在代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）。
+def log(func):
+    def wrapper(*args, **kw):
+        print('call %s():' % func.__name__)
+        return func(*args, **kw)
+    return wrapper
+
+@log
+def now():
+    print('2015-3-25')
+
+由于log()是一个decorator，返回一个函数，所以，原来的now()函数仍然存在，只是现在同名的now变量指向了新的函数，于是调用now()将执行新函数，即在log()函数中返回的wrapper()函数。
+
+wrapper()函数的参数定义是(*args, **kw)，因此，wrapper()函数可以接受任意参数的调用。在wrapper()函数内，首先打印日志，再紧接着调用原始函数。
+
+因为返回的那个wrapper()函数名字就是'wrapper'，所以，需要把原始函数的__name__等属性复制到wrapper()函数中，否则，有些依赖函数签名的代码执行就会出错。
+
+不需要编写wrapper.__name__ = func.__name__这样的代码，Python内置的functools.wraps就是干这个事的，所以，一个完整的decorator的写法如下：
+import functools
+def log(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kw):
+        print('call %s():' % func.__name__)
+        return func(*args, **kw)
+    return wrapper
+
+偏函数
+functools.partial的作用就是，把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数，调用这个新函数会更简单。
+
+模块
+创建自己的模块时，要注意：
+1.模块名要遵循Python变量命名规范，不要使用中文、特殊字符；
+2.模块名不要和系统模块名冲突，最好先查看系统是否已存在该模块，检查方法是在Python交互环境执行import abc，若成功则说明系统存在此模块。
+
+使用模块
+import sys
+导入sys模块后，我们就有了变量sys指向该模块，利用sys这个变量，就可以访问sys模块的所有功能。
+
+sys模块有一个argv变量，用list存储了命令行的所有参数。argv至少有一个元素，因为第一个参数永远是该.py文件的名称，例如：
+
+运行python3 hello.py获得的sys.argv就是['hello.py']；
+最后，注意到这两行代码：
+
+if __name__=='__main__':
+    test()
+当我们在命令行运行hello模块文件时，Python解释器把一个特殊变量__name__置为__main__，而如果在其他地方导入该hello模块时，if判断将失败，因此，这种if测试可以让一个模块通过命令行运行时执行一些额外的代码，最常见的就是运行测试。	
+
+作用域
+_xx
+我们在模块里公开greeting()函数，而把内部逻辑用private函数隐藏起来了，这样，调用greeting()函数不用关心内部的private函数细节，这也是一种非常有用的代码封装和抽象的方法，即：
+
+外部不需要引用的函数全部定义成private，只有外部需要引用的函数才定义为public。
+
+面向对象编程
+面向过程的程序设计把计算机程序视为一系列的命令集合，即一组函数的顺序执行。为了简化程序设计，面向过程把函数继续切分为子函数，即把大块函数通过切割成小块函数来降低系统的复杂度。
+而面向对象的程序设计把计算机程序视为一组对象的集合，而每个对象都可以接收其他对象发过来的消息，并处理这些消息，计算机程序的执行就是一系列消息在各个对象之间传递。
+
+对象的属性 数据和操作方法
+对象的方法 函数
+
+必须牢记类是抽象的模板，比如Student类，而实例是根据类创建出来的一个个具体的“对象”，每个对象都拥有相同的方法，但各自的数据可能不同。
+由于类可以起到模板的作用，因此，可以在创建实例的时候，把一些我们认为必须绑定的属性强制填写进去。通过定义一个特殊的__init__方法，在创建实例的时候，就把name，score等属性绑上去：
+注意到__init__方法的第一个参数永远是self，表示创建的实例本身，因此，在__init__方法内部，就可以把各种属性绑定到self，因为self就指向创建的实例本身。
+
+有了__init__方法，在创建实例的时候，就不能传入空的参数了，必须传入与__init__方法匹配的参数，但self不需要传，Python解释器自己会把实例变量传进去：
+
+需要注意的是，在Python中，变量名类似__xxx__的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的，不是private变量，所以，不能用__name__、__score__这样的变量名。
+
+有些时候，你会看到以一个下划线开头的实例变量名，比如_name，这样的实例变量外部是可以访问的，但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
+
+双下划线开头的实例变量是不是一定不能从外部访问呢？其实也不是。不能直接访问__name是因为Python解释器对外把__name变量改成了_Student__name，所以，仍然可以通过_Student__name来访问__name变量：
+
+当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类（Subclass），而被继承的class称为基类、父类或超类（Base class、Super class）。
+当子类和父类都存在相同的run()方法时，我们说，子类的run()覆盖了父类的run()，在代码运行的时候，总是会调用子类的run()。这样，我们就获得了继承的另一个好处：多态。
+
+多态的好处就是，当我们需要传入Dog、Cat、Tortoise……时，我们只需要接收Animal类型就可以了，因为Dog、Cat、Tortoise……都是Animal类型，然后，按照Animal类型进行操作即可。由于Animal类型有run()方法，因此，传入的任意类型，只要是Animal类或者子类，就会自动调用实际类型的run()方法，这就是多态的意思：
+
+对于一个变量，我们只需要知道它是Animal类型，无需确切地知道它的子类型，就可以放心地调用run()方法，而具体调用的run()方法是作用在Animal、Dog、Cat还是Tortoise对象上，由运行时该对象的确切类型决定，这就是多态真正的威力：调用方只管调用，不管细节，而当我们新增一种Animal的子类时，只要确保run()方法编写正确，不用管原来的代码是如何调用的。这就是著名的“开闭”原则：
+
+对扩展开放：允许新增Animal子类；
+
+对修改封闭：不需要修改依赖Animal类型的run_twice()等函数。
+
+获取对象的信息
+isinstance
+object -> Animal -> Dog -> Husky
+那么，isinstance()就可以告诉我们，一个对象是否是某种类型。先创建3种类型的对象：
+
+>>> a = Animal()
+>>> d = Dog()
+>>> h = Husky()
+
+
+如果要获得一个对象的所有属性和方法，可以使用dir()函数，它返回一个包含字符串的list，
+
+实例属性属于各个实例所有，互不干扰；
+
+类属性属于类所有，所有实例共享一个属性；
+
+不要对实例属性和类属性使用相同的名字，否则将产生难以发现的错误。
+
+通常情况下，上面的set_score方法可以直接定义在class中，但动态绑定允许我们在程序运行的过程中动态给class加上功能，这在静态语言中很难实现
+
+由于'score'没有被放到__slots__中，所以不能绑定score属性，试图绑定score将得到AttributeError的错误。
+
+使用__slots__要注意，__slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的：
+
+@property广泛应用在类的定义中，可以让调用者写出简短的代码，同时保证对参数进行必要的检查，这样，程序运行时就减少了出错的可能性
+
+多重继承
+对于需要Runnable功能的动物，就多继承一个Runnable，例如Dog：
+
+class Dog(Mammal, Runnable):
+    pass
+对于需要Flyable功能的动物，就多继承一个Flyable，例如Bat：
+
+class Bat(Mammal, Flyable):
+    pass
+通过多重继承，一个子类就可以同时获得多个父类的所有功能。
+
+定制类
+
+元类
+
+10.错误处理调试
+try:
+    print('try...')
+    r = 10 / 0
+    print('result:', r)
+except ZeroDivisionError as e:
+    print('except:', e)
+finally:
+    print('finally...')
+print('END')
+
+用try来运行这段代码，如果执行出错，则后续代码不会继续执行，而是直接跳转至错误处理代码，即except语句块，执行完except后，如果有finally语句块，则执行finally语句块，至此，执行完毕。
+Python内置的logging模块可以非常容易地记录错误信息：
+
+调试
+print（）添加打印
+assert 断言
+logging
+
+单元测试
+单元测试是用来对一个模块、一个函数或者一个类来进行正确性检验的测试工作。
+
+比如对函数abs()，我们可以编写出以下几个测试用例：
+
+输入正数，比如1、1.2、0.99，期待返回值与输入相同；
+
+输入负数，比如-1、-1.2、-0.99，期待返回值与输入相反；
+
+输入0，期待返回0；
+
+输入非数值类型，比如None、[]、{}，期待抛出TypeError。
+
+把上面的测试用例放到一个测试模块里，就是一个完整的单元测试。
+
+如果单元测试通过，说明我们测试的这个函数能够正常工作。如果单元测试不通过，要么函数有bug，要么测试条件输入不正确，总之，需要修复使单元测试能够通过。
+
+单元测试通过后有什么意义呢？如果我们对abs()函数代码做了修改，只需要再跑一遍单元测试，如果通过，说明我们的修改不会对abs()函数原有的行为造成影响，如果测试不通过，说明我们的修改与原有行为不一致，要么修改代码，要么修改测试。
+
+这种以测试为驱动的开发模式最大的好处就是确保一个程序模块的行为符合我们设计的测试用例。在将来修改的时候，可以极大程度地保证该模块行为仍然是正确的。
+
+运行单元测试
+一旦编写好单元测试，我们就可以运行单元测试。最简单的运行方式是在mydict_test.py的最后加上两行代码：
+另一种方法是在命令行通过参数-m unittest直接运行单元测试：
+
+测试文档
+doctest非常有用，不但可以用来测试，还可以直接作为示例代码。通过某些文档生成工具，就可以自动把包含doctest的注释提取出来。用户看文档的时候，同时也看到了doctest。
+
+同步I/O
+
+异步I/O
+中断
+轮询
+
+文件读写
+open（）
+read（）
+write（）
+close（）
+
+
+stringIO和BytesIO
+StringIO和BytesIO是在内存中操作str和bytes的方法，使得和读写文件具有一致的接口
+
+多进程
+fork（）
+pool（）
+
+子进程
+
+进程间通信
+在Unix/Linux下，可以使用fork()调用实现多进程。
+
+要实现跨平台的多进程，可以使用multiprocessing模块。
+
+进程间通信是通过Queue、Pipes等实现的
+
+线程
+线程锁
+一个ThreadLocal变量虽然是全局变量，但每个线程都只能读写自己线程的独立副本，互不干扰。ThreadLocal解决了参数在一个线程中各个函数之间互相传递的问题。
+
+
+常用内建模块
+datetime 时间
+datetime.now()
+timestamp ()
+datetime.strptime()
+fromtimestamp()
+datetime加减 + -
+
+collections
+namedtuple 定义数据类型
+deque 双向列表 用于队列和栈deque除了实现list的append()和pop()外，还支持appendleft()和popleft()，这样就可以非常高效地往头部添加或删除元素。
+
+
+defaultdict
+注意默认值是调用函数返回的，而函数在创建defaultdict对象时传入。
+除了在Key不存在时返回默认值，defaultdict的其他行为跟dict是完全一样的。
+
+
+OrderedDict
+使用dict时，Key是无序的。在对dict做迭代时，我们无法确定Key的顺序。
+如果要保持Key的顺序，可以用OrderedDict：
+注意，OrderedDict的Key会按照插入的顺序排列，不是Key本身排序：
+OrderedDict可以实现一个FIFO（先进先出）的dict，当容量超出限制时，先删除最早添加的Key：
+
+
+
+ChainMap
+ChainMap可以把一组dict串起来并组成一个逻辑上的dict。ChainMap本身也是一个dict，但是查找的时候，会按照顺序在内部的dict依次查找。
+什么时候使用ChainMap最合适？举个例子：应用程序往往都需要传入参数，参数可以通过命令行传入，可以通过环境变量传入，还可以有默认参数。我们可以用ChainMap实现参数的优先级查找，即先查命令行参数，如果没有传入，再查环境变量，如果没有，就使用默认参数。
+
+base64
+处理二进制数据
+
+struct
+struct模块来解决bytes和其他二进制数据类型的转换。
+struct的pack函数把任意数据类型变成bytes：
+
+hashlib
+。。。
+未看完，后面补上
+
+
+网络编程
+1.tcp/ip
+AF_INET指定使用IPv4协议，如果要用更先进的IPv6，就指定为AF_INET6SOCK_STREAM指定使用面向流的TCP协议，这样，一个Socket对象就创建成功，但是还没有建立连接
+个Socket依赖4项：服务器地址、服务器端口、客户端地址、客户端端口来唯一确定一个Socket。
+我们要绑定监听的地址和端口。服务器可能有多块网卡，可以绑定到某一块网卡的IP地址上，也可以用0.0.0.0绑定到所有的网络地址，还可以用127.0.0.1绑定到本机地址。127.0.0.1是一个特殊的IP地址，表示本机地址，如果绑定到这个地址，客户端必须同时在本机运行才能连接，也就是说，外部的计算机无法连接进来。
+
+'\r' 回车，回到当前行的行首，而不会换到下一行，如果接着输出的话，本行以前的内容会被逐一覆盖；
+'\n' 换行，换到当前位置的下一行，而不会回到行首；
+
+服务器端
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind(('127.0.0.1', 9999))
+s.listen(5)
+print('Waiting for connection...')
+
+while True:
+    # 接受一个新连接:
+    sock, addr = s.accept()
+    # 创建新线程来处理TCP连接:
+    t = threading.Thread(target=tcplink, args=(sock, addr))
+    t.start()
+	
+
+def tcplink(sock, addr):
+    print('Accept new connection from %s:%s...' % addr)
+    sock.send(b'Welcome!')
+    while True:
+        data = sock.recv(1024)
+        time.sleep(1)
+        if not data or data.decode('utf-8') == 'exit':
+            break
+        sock.send(('Hello, %s!' % data.decode('utf-8')).encode('utf-8'))
+    sock.close()
+    print('Connection from %s:%s closed.' % addr)
+
+
+
+客户端
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# 建立连接:
+s.connect(('127.0.0.1', 9999))
+# 接收欢迎消息:
+print(s.recv(1024).decode('utf-8'))
+for data in [b'Michael', b'Tracy', b'Sarah']:
+    # 发送数据:
+    s.send(data)
+    print(s.recv(1024).decode('utf-8'))
+s.send(b'exit')
+s.close()
+
+UDP
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# 绑定端口:
+服务器
+s.bind(('127.0.0.1', 9999))
+print('Bind UDP on 9999...')
+while True:
+    # 接收数据:
+    data, addr = s.recvfrom(1024)
+    print('Received from %s:%s.' % addr)
+    s.sendto(b'Hello, %s!' % data, addr)
+	
+客户端	
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+for data in [b'Michael', b'Tracy', b'Sarah']:
+    # 发送数据:
+    s.sendto(data, ('127.0.0.1', 9999))
+    # 接收数据:
+    print(s.recv(1024).decode('utf-8'))
+s.close()
+
+
+SMTP发送邮件
+SMTP是发送邮件的协议，Python内置对SMTP的支持，可以发送纯文本邮件、HTML邮件以及带附件的邮件。
+Python对SMTP支持有smtplib和email两个模块，email负责构造邮件，smtplib负责发送邮件。
+
+
+POP3收取邮件
+
+SMTP用于发送邮件，如果要收取邮件呢？
+收取邮件就是编写一个MUA作为客户端，从MDA把邮件获取到用户的电脑或者手机上。收取邮件最常用的协议是POP协议，目前版本号是3，俗称POP3。
+Python内置一个poplib模块，实现了POP3协议，可以直接用来收邮件。
+注意到POP3协议收取的不是一个已经可以阅读的邮件本身，而是邮件的原始文本，这和SMTP协议很像，SMTP发送的也是经过编码后的一大段文本。
+要把POP3收取的文本变成可以阅读的邮件，还需要用email模块提供的各种类来解析原始文本，变成可阅读的邮件对象。
+
+所以，收取邮件分两步：
+第一步：用poplib把邮件的原始文本下载到本地；
+第二部：用email解析原始文本，还原为邮件对象。
+
+
+访问数据库

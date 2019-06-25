@@ -1,0 +1,599 @@
+1.基础知识
+mysql设置
+如果你需要添加 MySQL 用户，你只需要在 mysql 数据库中的 user 表添加新用户即可。
+
+INSERT INTO user (host, user, password, select_priv, insert_priv, update_priv) VALUES ('localhost', 'guest',  PASSWORD('guest123'), 'Y', 'Y', 'Y');
+
+GRANT USAGE ON *.* TO 'user01'@'localhost' IDENTIFIED BY '123456' WITH GRANT OPTION; //创建新用户
+注意：在注意需要执行 FLUSH PRIVILEGES 语句。 这个命令执行后会重新载入授权表。
+如果你不使用该命令，你就无法使用新创建的用户来连接mysql服务器，除非你重启mysql服务器。
+
+管理MYsql的命令
+USE 数据库名;
+选择要用的数据库，使用后，所有命令都只针对该数据库
+
+SHOW DATABASES;
+列出mysql数据库系统的数据库列表
+
+SHOW TABLES;
+显示指定数据库的所有表，使用该命令前需要使用use命令来选择要操作的数据库。
+
+SHOW COLUMNS FROM 数据表；
+显示数据表的属性，属性类型，主键信息，是否为NULL,默认值等其他信息。
+
+
+SHOW INDEX FROM 数据表；
+显示数据表的详细索引信息，包括PRIMARY KEY(主键)
+
+SHOW TABLES STATUS LIKE[FROM db_name][LIKE 'pattern']\G;
+将输出Mysql数据库管理系统的性能以及统计信息
+
+2.Mysql的 PHP语法
+连接
+mysqli_connect(host,username,password,dbname,port,socket);
+成功返回连接标识符，失败返回false
+host	可选。规定主机名或 IP 地址。
+username	可选。规定 MySQL 用户名。
+password	可选。规定 MySQL 密码。
+dbname	可选。规定默认使用的数据库。
+port	可选。规定尝试连接到 MySQL 服务器的端口号。
+socket	可选。规定 socket 或要使用的已命名 pipe。
+
+断开
+bool mysqli_close(mysqli $link)
+本函数关闭指定的连接标识所关联的到 MySQL 服务器的非持久连接。如果没有指定 link_identifier，则关闭上一个打开的连接。
+提示：通常不需要使用 mysqli_close()，因为已打开的非持久连接会在脚本执行完毕后自动关闭。
+
+<?php
+$dbhost = 'localhost:3306';
+$dbuser = 'root';
+$dbpass = 'w123';
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+
+if(! $conn)
+{
+	die('Could not connect:' . mysqli_error());
+}
+echo '数据库连接成功！'；
+mysqli_close($conn);
+?>
+
+3.创建数据库
+CREATE DATABASES 数据库名;
+
+普通用户需要特定的权限。
+grant all privileges on `testdb`.* to 'test'@'%' identified by '123456';
+flush privileges;
+
+使用PHP脚本创建数据库
+mysqli_query(connection,query,resultmode);
+connection	必需。规定要使用的 MySQL 连接。
+query	必需，规定查询字符串。
+resultmode	可选。一个常量。可以是下列值中的任意一个：
+	MYSQLI_USE_RESULT（如果需要检索大量数据，请使用这个）
+	MYSQLI_STORE_RESULT（默认）
+
+<?php
+$dblocalhost = 'localhost:3306';
+$dbuser = 'root';
+$dbpass = 'w123';
+$conn = mysqli_connect($dbhost, $username, $dbpass);
+if(!$conn)
+{
+	die('Connect fail:' . mysqli_error($conn));
+}
+echo "connect successful"
+
+$sql = 'CREATE DATABASE RUNOOB';
+$retval = mysqli_query($conn, $sql);
+if(!$retval)
+{
+	die('create database fail' . mysqli_error($conn));
+}
+echo "create batabase successful"
+
+mysqli_close($conn);
+?>
+
+4.删除数据库
+删除数据库，要谨慎执行。
+drop database 数据库名;
+
+用php脚本删除数据库
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+echo '连接成功<br />';
+$sql = 'DROP DATABASE RUNOOB';
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('删除数据库失败: ' . mysqli_error($conn));
+}
+echo "数据库 RUNOOB 删除成功\n";
+mysqli_close($conn);
+?>
+
+5.选择数据库
+use RUNOOB
+mysqli_select_db(connection,dbname);
+connection	必需。规定要使用的 MySQL 连接。
+dbname	必需，规定要使用的默认数据库。
+
+
+php脚本选择数据库
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+echo '连接成功';
+mysqli_select_db($conn, 'RUNOOB' );
+mysqli_close($conn);
+?>
+	
+6.数据库的数据类型
+数据字段的类型，对数据库的优化非常重要
+大致分成三类 ：数值，日期/时间和字符串（字符）类型
+
+
+
+7.创建数据表
+表名
+表字段名
+定义每个表字段
+CREATE TABLES table_name(cloumn_name cloumn_type);
+
+CREATE TABLE IF NOT EXISTS `runoob_tbl`(
+   `runoob_id` INT UNSIGNED AUTO_INCREMENT,
+   `runoob_title` VARCHAR(100) NOT NULL,
+   `runoob_author` VARCHAR(40) NOT NULL,
+   `submission_date` DATE,
+   PRIMARY KEY ( `runoob_id` )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+如果你不想字段为 NULL 可以设置字段的属性为 NOT NULL， 在操作数据库时如果输入该字段的数据为NULL ，就会报错。
+AUTO_INCREMENT定义列为自增的属性，一般用于主键，数值会自动加1。
+PRIMARY KEY关键字用于定义列为主键。 您可以使用多列来定义主键，列间以逗号分隔。
+ENGINE 设置存储引擎，CHARSET 设置编码。
+
+php脚本创建数据库
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+echo '连接成功<br />';
+$sql = "CREATE TABLE runoob_tbl( ".
+        "runoob_id INT NOT NULL AUTO_INCREMENT, ".
+        "runoob_title VARCHAR(100) NOT NULL, ".
+        "runoob_author VARCHAR(40) NOT NULL, ".
+        "submission_date DATE, ".
+        "PRIMARY KEY ( runoob_id ))ENGINE=InnoDB DEFAULT CHARSET=utf8; ";
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('数据表创建失败: ' . mysqli_error($conn));
+}
+echo "数据表创建成功\n";
+mysqli_close($conn);
+?>
+
+8.删除数据表
+DROP TABLE table_name;
+
+php脚本删除表
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+  die('连接失败: ' . mysqli_error($conn));
+}
+echo '连接成功<br />';
+$sql = "DROP TABLE runoob_tbl";
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+  die('数据表删除失败: ' . mysqli_error($conn));
+}
+echo "数据表删除成功\n";
+mysqli_close($conn);
+?>
+
+9.插入数据
+INSERT INTO table_name(field1,field2...) VALUES (values1,values2..);
+使用PHP脚本插入数据
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+  die('连接失败: ' . mysqli_error($conn));
+}
+echo '连接成功<br />';
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$runoob_title = '学习 Python';
+$runoob_author = 'RUNOOB.COM';
+$submission_date = '2016-03-06';
+ 
+$sql = "INSERT INTO runoob_tbl ".
+        "(runoob_title,runoob_author, submission_date) ".
+        "VALUES ".
+        "('$runoob_title','$runoob_author','$submission_date')";
+ 
+ 
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+  die('无法插入数据: ' . mysqli_error($conn));
+}
+echo "数据插入成功\n";
+mysqli_close($conn);
+?>
+
+9.查询mysql数据
+SELECT column_name,column_name 
+FROM table_name
+[WHERE Clause]
+[LIMIT N][OFFSET M]
+查询语句中你可以使用一个或者多个表，表之间使用逗号(,)分割，并使用WHERE语句来设定查询条件。
+SELECT 命令可以读取一条或者多条记录。
+你可以使用星号（*）来代替其他字段，SELECT语句会返回表的所有字段数据
+你可以使用 WHERE 语句来包含任何条件。
+你可以使用 LIMIT 属性来设定返回的记录数。
+你可以通过OFFSET指定SELECT语句开始查询的数据偏移量。默认情况下偏移量为0。
+
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$sql = 'SELECT runoob_id, runoob_title, 
+        runoob_author, submission_date
+        FROM runoob_tbl';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法读取数据: ' . mysqli_error($conn));
+}
+echo '<h2>菜鸟教程 mysqli_fetch_array 测试<h2>';
+echo '<table border="1"><tr><td>教程 ID</td><td>标题</td><td>作者</td><td>提交日期</td></tr>';
+while($row = mysqli_fetch_array($retval, MYSQLI_ASSOC))
+{
+    echo "<tr><td> {$row['runoob_id']}</td> ".
+         "<td>{$row['runoob_title']} </td> ".
+         "<td>{$row['runoob_author']} </td> ".
+         "<td>{$row['submission_date']} </td> ".
+         "</tr>";
+}
+echo '</table>';
+mysqli_close($conn);
+?>
+
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$sql = 'SELECT runoob_id, runoob_title, 
+        runoob_author, submission_date
+        FROM runoob_tbl';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法读取数据: ' . mysqli_error($conn));
+}
+echo '<h2>菜鸟教程 mysqli_fetch_assoc 测试<h2>';
+echo '<table border="1"><tr><td>教程 ID</td><td>标题</td><td>作者</td><td>提交日期</td></tr>';
+while($row = mysqli_fetch_assoc($retval))
+{
+    echo "<tr><td> {$row['runoob_id']}</td> ".
+         "<td>{$row['runoob_title']} </td> ".
+         "<td>{$row['runoob_author']} </td> ".
+         "<td>{$row['submission_date']} </td> ".
+         "</tr>";
+}
+echo '</table>';
+mysqli_close($conn);
+?>
+
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$sql = 'SELECT runoob_id, runoob_title, 
+        runoob_author, submission_date
+        FROM runoob_tbl';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法读取数据: ' . mysqli_error($conn));
+}
+echo '<h2>菜鸟教程 mysqli_fetch_array 测试<h2>';
+echo '<table border="1"><tr><td>教程 ID</td><td>标题</td><td>作者</td><td>提交日期</td></tr>';
+while($row = mysqli_fetch_array($retval, MYSQLI_NUM))
+{
+    echo "<tr><td> {$row[0]}</td> ".
+         "<td>{$row[1]} </td> ".
+         "<td>{$row[2]} </td> ".
+         "<td>{$row[3]} </td> ".
+         "</tr>";
+}
+echo '</table>';
+mysqli_close($conn);
+?>
+
+
+10.Mysql WHERE子句
+SELECT field1, field2 ... FROM table_name1, table_name2...
+[WHERE condition1 [AND [OR]] condition2 ...]
+查询语句中你可以使用一个或者多个表，表之间使用逗号, 分割，并使用WHERE语句来设定查询条件。
+你可以在 WHERE 子句中指定任何条件。
+你可以使用 AND 或者 OR 指定一个或多个条件。
+WHERE 子句也可以运用于 SQL 的 DELETE 或者 UPDATE 命令。
+WHERE 子句类似于程序语言中的 if 条件，根据 MySQL 表中的字段值来读取指定的数据。
+MySQL 的 WHERE 子句的字符串比较是不区分大小写的。 你可以使用 BINARY 关键字来设定 WHERE 子句的字符串比较是区分大小写的。
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+// 读取 runoob_author 为 RUNOOB.COM 的数据
+$sql = 'SELECT runoob_id, runoob_title, 
+        runoob_author, submission_date
+        FROM runoob_tbl
+        WHERE runoob_author="RUNOOB.COM"';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法读取数据: ' . mysqli_error($conn));
+}
+echo '<h2>菜鸟教程 MySQL WHERE 子句测试<h2>';
+echo '<table border="1"><tr><td>教程 ID</td><td>标题</td><td>作者</td><td>提交日期</td></tr>';
+while($row = mysqli_fetch_array($retval, MYSQL_ASSOC))
+{
+    echo "<tr><td> {$row['runoob_id']}</td> ".
+         "<td>{$row['runoob_title']} </td> ".
+         "<td>{$row['runoob_author']} </td> ".
+         "<td>{$row['submission_date']} </td> ".
+         "</tr>";
+}
+echo '</table>';
+// 释放内存
+mysqli_free_result($retval);
+mysqli_close($conn);
+?>
+
+11.Mysql 修改数据
+UPDATE table_name SET field1=new-value，field2=new-values2
+[WHERE Clause]
+你可以同时更新一个或多个字段。
+你可以在 WHERE 子句中指定任何条件。
+你可以在一个单独表中同时更新数据。
+使用php跟新数据
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$sql = 'UPDATE runoob_tbl
+        SET runoob_title="学习 Python"
+        WHERE runoob_id=3';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法更新数据: ' . mysqli_error($conn));
+}
+echo '数据更新成功！';
+mysqli_close($conn);
+?>
+
+
+12.Mysql 删除数据
+DELETE FROM table_name [WHERE Clause]
+MySQL DELETE 子句测试：
+<?php
+$dbhost = 'localhost:3306';  // mysql服务器主机地址
+$dbuser = 'root';            // mysql用户名
+$dbpass = '123456';          // mysql用户名密码
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass);
+if(! $conn )
+{
+    die('连接失败: ' . mysqli_error($conn));
+}
+// 设置编码，防止中文乱码
+mysqli_query($conn , "set names utf8");
+ 
+$sql = 'DELETE FROM runoob_tbl
+        WHERE runoob_id=3';
+ 
+mysqli_select_db( $conn, 'RUNOOB' );
+$retval = mysqli_query( $conn, $sql );
+if(! $retval )
+{
+    die('无法删除数据: ' . mysqli_error($conn));
+}
+echo '数据删除成功！';
+mysqli_close($conn);
+?>
+
+13.匹配查询
+SELECT field1，field2，...
+FROM table_name
+WHERE field1 LIKE condition1[AND[OR]] field2='somevalues'
+你可以在 WHERE 子句中指定任何条件。
+你可以在 WHERE 子句中使用LIKE子句。
+你可以使用LIKE子句代替等号 =。
+LIKE 通常与 % 一同使用，类似于一个元字符的搜索。
+你可以使用 AND 或者 OR 指定一个或多个条件。
+你可以在 DELETE 或 UPDATE 命令中使用 WHERE...LIKE 子句来指定条件。
+
+like 匹配/模糊匹配，会与 % 和 _ 结合使用。
+'%a'     //以a结尾的数据
+'a%'     //以a开头的数据
+'%a%'    //含有a的数据
+'_a_'    //三位且中间字母是a的
+'_a'     //两位且结尾字母是a的
+'a_'     //两位且开头字母是a的
+查询以 java 字段开头的信息。
+SELECT * FROM position WHERE name LIKE 'java%';
+查询包含 java 字段的信息。
+SELECT * FROM position WHERE name LIKE '%java%';
+查询以 java 字段结尾的信息。
+SELECT * FROM position WHERE name LIKE '%java';
+
+14.连接多个查询结果
+SELECT expression1, expression2,...
+FROM tables
+[WHERE conditions]
+UNION [ALL | DISTINCT]
+SELECT expression1, expression2,....
+FROM tables
+[WHERE conditions];
+
+expression1, expression2, ... expression_n: 要检索的列。
+tables: 要检索的数据表。
+WHERE conditions: 可选， 检索条件。
+DISTINCT: 可选，删除结果集中重复的数据。默认情况下 UNION 操作符已经删除了重复数据，所以 DISTINCT 修饰符对结果没啥影响。
+ALL: 可选，返回所有结果集，包含重复数据。
+
+
+15.Mysql 排序
+如果我们需要对读取的数据进行排序，我们就可以使用 MySQL 的 ORDER BY 子句来设定你想按哪个字段哪种方式来进行排序，再返回搜索结果。
+SELECT field1，field2，... table_name1, table_name2...
+ORDER BY field1, [field2... [ASC [DESC]]]
+你可以使用任何字段来作为排序的条件，从而返回排序后的查询结果。
+你可以设定多个字段来排序。
+你可以使用 ASC 或 DESC 关键字来设置查询结果是按升序或降序排列。 默认情况下，它是按升序排列。
+你可以添加 WHERE...LIKE 子句来设置条件。
+
+16.Mysql GROUP BY语句
+SELECT column_name, function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name;
+
+WITH ROLLUP 可以实现在分组统计数据基础上再进行相同的统计（SUM,AVG,COUNT…）。
+
+
+select coalesce(a,b,c);
+参数说明：如果a==null,则选择b；如果b==null,则选择c；如果a!=null,则选择a；如果a b c 都为null ，则返回为null（没意义）。
+
+16.多表查询
+你可以在 SELECT, UPDATE 和 DELETE 语句中使用 Mysql 的 JOIN 来联合多表查询。
+
+JOIN 按照功能大致分为如下三类：
+
+INNER JOIN（内连接,或等值连接）：获取两个表中字段匹配关系的记录。
+LEFT JOIN（左连接）：获取左表所有记录，即使右表没有对应匹配的记录。
+RIGHT JOIN（右连接）： 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录。
+
+17.Mysql NULL值处理
+我们已经知道 MySQL 使用 SQL SELECT 命令及 WHERE 子句来读取数据表中的数据,但是当提供的查询条件字段为 NULL 时，该命令可能就无法正常工作。
+
+为了处理这种情况，MySQL提供了三大运算符:
+
+IS NULL: 当列的值是 NULL,此运算符返回 true。
+IS NOT NULL: 当列的值不为 NULL, 运算符返回 true。
+<=>: 比较操作符（不同于=运算符），当比较的的两个值为 NULL 时返回 true。
+关于 NULL 的条件比较运算是比较特殊的。你不能使用 = NULL 或 != NULL 在列中查找 NULL 值 。
+
+18.正则表达式
+MySQL可以通过 LIKE ...% 来进行模糊匹配。
+MySQL 同样也支持其他正则表达式的匹配， MySQL中使用 REGEXP 操作符来进行正则表达式匹配。
+如果您了解PHP或Perl，那么操作起来就非常简单，因为MySQL的正则表达式匹配与这些脚本的类似。
+^	匹配输入字符串的开始位置。如果设置了 RegExp 对象的 Multiline 属性，^ 也匹配 '\n' 或 '\r' 之后的位置。
+$	匹配输入字符串的结束位置。如果设置了RegExp 对象的 Multiline 属性，$ 也匹配 '\n' 或 '\r' 之前的位置。
+.	匹配除 "\n" 之外的任何单个字符。要匹配包括 '\n' 在内的任何字符，请使用象 '[.\n]' 的模式。
+[...]	字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的 'a'。
+[^...]	负值字符集合。匹配未包含的任意字符。例如， '[^abc]' 可以匹配 "plain" 中的'p'。
+p1|p2|p3	匹配 p1 或 p2 或 p3。例如，'z|food' 能匹配 "z" 或 "food"。'(z|f)ood' 则匹配 "zood" 或 "food"。
+*	匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,}。
++	匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配 "z"。+ 等价于 {1,}。
+{n}	n 是一个非负整数。匹配确定的 n 次。例如，'o{2}' 不能匹配 "Bob" 中的 'o'，但是能匹配 "food" 中的两个 o。
+{n,m}	m 和 n 均为非负整数，其中n <= m。最少匹配 n 次且最多匹配 m 次。
+
+
+在 MySQL 中，NULL 值与任何其它值的比较（即使是 NULL）永远返回 false，即 NULL = NULL 返回false 。
+MySQL 中处理 NULL 使用 IS NULL 和 IS NOT NULL 运算符。
+
+
+
+
+
+
+
+
+
+
+

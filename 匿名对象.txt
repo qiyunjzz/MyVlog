@@ -1,0 +1,3 @@
+之间new。
+只需要用一次的对象，可以使用匿名对象，比如用做传入的参数。例如:
+int num = new Scanner(System.in).nextInt();

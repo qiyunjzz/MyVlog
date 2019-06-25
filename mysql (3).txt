@@ -1,0 +1,10 @@
+insert into students values(NULL,"王刚","男",20,"13611223344");
+insert into students values(NULL,"张三","男",25,"13611224344");
+insert into students values(NULL,"李四","男",26,"13611225344");
+insert into students values(NULL,"王五","男",28,"13611226344");
+insert into students values(NULL,"小二","男",29,"13611223744");
+insert into students values(NULL,"大大","男",21,"13611223944");
+insert into students values(NULL,"菲菲","女",23,"13611220344");
+insert into students values(NULL,"二丫","女",20,"13611224344");
+
+jdbc:mysql://hostip:3306/dbname?useUnicode=true&amp;characterEncoding=GBK
